@@ -32,46 +32,116 @@
   --color-ring: var(--ring);
   --color-yes: var(--yes);
   --color-no: var(--no);
-  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
 }
 
 :root {
-  --radius: 1.25rem;
-  --background: oklch(0.98 0.012 90);
-  --foreground: oklch(0.18 0.03 290);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.03 290);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.03 290);
-  --primary: oklch(0.55 0.22 295);
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.95 0.03 90);
-  --secondary-foreground: oklch(0.2 0.03 290);
-  --muted: oklch(0.95 0.02 90);
-  --muted-foreground: oklch(0.5 0.03 290);
-  --accent: oklch(0.78 0.18 60);
-  --accent-foreground: oklch(0.18 0.03 290);
-  --destructive: oklch(0.62 0.24 25);
-  --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.9 0.02 290);
-  --input: oklch(0.9 0.02 290);
-  --ring: oklch(0.55 0.22 295);
-  --yes: oklch(0.72 0.19 155);
-  --no: oklch(0.65 0.24 20);
+  --radius: 1.375rem;
 
-  --gradient-hero: linear-gradient(135deg, oklch(0.78 0.18 60) 0%, oklch(0.65 0.24 20) 35%, oklch(0.55 0.22 295) 100%);
-  --gradient-card: linear-gradient(160deg, oklch(1 0 0) 0%, oklch(0.97 0.02 90) 100%);
-  --gradient-yes: linear-gradient(135deg, oklch(0.78 0.19 155), oklch(0.65 0.2 175));
-  --gradient-no: linear-gradient(135deg, oklch(0.72 0.22 25), oklch(0.65 0.24 350));
-  --shadow-card: 0 30px 60px -20px oklch(0.3 0.1 290 / 0.25), 0 10px 25px -10px oklch(0.3 0.1 290 / 0.15);
-  --shadow-glow: 0 0 80px oklch(0.78 0.18 60 / 0.4);
+  /* Pastel blue & pink iOS palette */
+  --background: oklch(0.975 0.018 255);
+  --foreground: oklch(0.28 0.04 275);
+  --card: oklch(0.995 0.012 255);
+  --card-foreground: oklch(0.28 0.04 275);
+  --popover: oklch(0.995 0.008 255);
+  --popover-foreground: oklch(0.28 0.04 275);
+  --primary: oklch(0.68 0.14 350);
+  --primary-foreground: oklch(0.99 0.005 350);
+  --secondary: oklch(0.94 0.025 255);
+  --secondary-foreground: oklch(0.32 0.04 275);
+  --muted: oklch(0.945 0.02 255);
+  --muted-foreground: oklch(0.52 0.035 275);
+  --accent: oklch(0.78 0.1 245);
+  --accent-foreground: oklch(0.28 0.04 275);
+  --destructive: oklch(0.68 0.16 15);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0.03 255 / 0.65);
+  --input: oklch(0.92 0.025 255);
+  --ring: oklch(0.72 0.12 350);
+  --yes: oklch(0.68 0.12 235);
+  --no: oklch(0.72 0.14 355);
+
+  --gradient-hero: linear-gradient(
+    135deg,
+    oklch(0.82 0.1 245) 0%,
+    oklch(0.78 0.12 350) 55%,
+    oklch(0.74 0.14 330) 100%
+  );
+  --gradient-card: linear-gradient(
+    165deg,
+    oklch(0.88 0.06 255 / 0.55) 0%,
+    oklch(0.86 0.08 350 / 0.45) 100%
+  );
+  --gradient-card-solid: linear-gradient(
+    180deg,
+    oklch(1 0.008 255) 0%,
+    oklch(0.975 0.022 350) 100%
+  );
+  --card-solid-muted: oklch(0.955 0.028 270);
+  --card-border: oklch(0.91 0.03 255);
+  --gradient-yes: linear-gradient(145deg, oklch(0.76 0.11 235), oklch(0.68 0.12 220));
+  --gradient-no: linear-gradient(145deg, oklch(0.8 0.12 355), oklch(0.72 0.14 340));
+  --gradient-button: linear-gradient(145deg, oklch(0.72 0.13 245), oklch(0.7 0.14 350));
+
+  --shadow-card:
+    0 1px 2px oklch(0.55 0.06 275 / 0.06),
+    0 8px 24px oklch(0.55 0.08 275 / 0.1),
+    0 24px 48px oklch(0.55 0.06 275 / 0.08);
+  --shadow-glow: 0 8px 32px oklch(0.72 0.12 350 / 0.28);
+  --shadow-ios-button: 0 4px 14px oklch(0.55 0.08 275 / 0.18);
+  --glass-border: oklch(1 0 0 / 0.55);
 }
 
 @layer base {
-  * { border-color: var(--color-border); }
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+@layer utilities {
+  .ios-glass {
+    background: var(--gradient-card);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-card);
+  }
+
+  .ios-card {
+    background: var(--gradient-card-solid);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--shadow-card);
+  }
+
+  .ios-card-back {
+    background: var(--card-solid-muted);
+    border: 1px solid var(--card-border);
+    box-shadow: 0 6px 16px oklch(0.55 0.06 275 / 0.08);
+    pointer-events: none;
+  }
+
+  .ios-pill {
+    border-radius: 9999px;
+  }
+
+  .safe-bottom {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  .safe-top {
+    padding-top: max(1.5rem, env(safe-area-inset-top));
   }
 }

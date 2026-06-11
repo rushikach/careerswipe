@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, type PanInfo } from "framer-motion";
 
 export const Route = createFileRoute("/")({
@@ -134,24 +134,29 @@ function CareerSwipe() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-[100dvh] overflow-x-hidden">
       <BackgroundBlobs />
-      <main className="relative z-10 mx-auto flex min-h-screen max-w-xl flex-col px-5 py-8">
-        <header className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-foreground text-background">
-              <span className="text-lg">↗</span>
+      <main className="relative z-10 mx-auto flex min-h-[100dvh] max-w-xl flex-col px-5 safe-top safe-bottom">
+        <header className="ios-glass flex items-center justify-between rounded-2xl px-4 py-3">
+          <div className="flex items-center gap-2.5">
+            <div
+              className="grid h-9 w-9 place-items-center rounded-[11px] text-base font-semibold text-white shadow-[var(--shadow-ios-button)]"
+              style={{ background: "var(--gradient-button)" }}
+            >
+              ↗
             </div>
-            <span className="text-lg font-semibold tracking-tight">careerswipe</span>
+            <span className="text-[17px] font-semibold tracking-tight">careerswipe</span>
           </div>
           {stage === "swipe" && (
-            <span className="rounded-full border border-border bg-card/70 px-3 py-1 text-xs font-medium backdrop-blur">
+            <span className="ios-pill bg-secondary px-3 py-1 text-xs font-medium text-muted-foreground">
               {index + 1} / {QUESTIONS.length}
             </span>
           )}
         </header>
 
-        <div className="flex flex-1 items-center justify-center py-10">
+        <div
+          className={`flex flex-1 items-center justify-center ${stage === "swipe" ? "py-6" : "py-10"}`}
+        >
           <AnimatePresence mode="wait">
             {stage === "intro" && <Intro key="intro" onStart={() => setStage("swipe")} />}
             {stage === "swipe" && (
@@ -165,11 +170,17 @@ function CareerSwipe() {
           </AnimatePresence>
         </div>
 
-        {stage === "swipe" && <Progress value={(index / QUESTIONS.length) * 100} />}
+        {stage === "swipe" && (
+          <div className="mt-auto space-y-4">
+            <Progress value={(index / QUESTIONS.length) * 100} />
+          </div>
+        )}
 
-        <footer className="pt-6 text-center text-xs text-muted-foreground">
-          Built for curious students · {QUESTIONS.length} quick prompts
-        </footer>
+        {stage !== "swipe" && (
+          <footer className="pt-6 text-center text-xs text-muted-foreground">
+            Built for curious students · {QUESTIONS.length} quick prompts
+          </footer>
+        )}
       </main>
     </div>
   );
@@ -178,9 +189,18 @@ function CareerSwipe() {
 function BackgroundBlobs() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="absolute -left-32 -top-32 h-96 w-96 rounded-full opacity-50 blur-3xl" style={{ background: "var(--gradient-no)" }} />
-      <div className="absolute -bottom-40 -right-24 h-[28rem] w-[28rem] rounded-full opacity-40 blur-3xl" style={{ background: "var(--gradient-yes)" }} />
-      <div className="absolute left-1/2 top-1/3 h-72 w-72 -translate-x-1/2 rounded-full opacity-30 blur-3xl" style={{ background: "var(--gradient-hero)" }} />
+      <div
+        className="absolute -left-24 -top-24 h-80 w-80 rounded-full opacity-60 blur-3xl"
+        style={{ background: "oklch(0.82 0.1 245 / 0.55)" }}
+      />
+      <div
+        className="absolute -bottom-32 -right-20 h-96 w-96 rounded-full opacity-50 blur-3xl"
+        style={{ background: "oklch(0.82 0.12 350 / 0.5)" }}
+      />
+      <div
+        className="absolute left-1/2 top-1/4 h-64 w-64 -translate-x-1/2 rounded-full opacity-40 blur-3xl"
+        style={{ background: "oklch(0.88 0.08 300 / 0.45)" }}
+      />
     </div>
   );
 }
@@ -191,27 +211,31 @@ function Intro({ onStart }: { onStart: () => void }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="text-center"
+      className="w-full text-center"
     >
-      <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-xs font-medium backdrop-blur">
-        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-yes" />
+      <div className="ios-glass ios-pill mb-6 inline-flex items-center gap-2 px-4 py-1.5 text-xs font-medium text-muted-foreground">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
         60 second career check
       </div>
-      <h1 className="text-balance text-5xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
-        Swipe your way to <span className="bg-clip-text text-transparent" style={{ backgroundImage: "var(--gradient-hero)" }}>the right career.</span>
+      <h1 className="text-balance text-[2.35rem] font-bold leading-[1.08] tracking-tight sm:text-5xl">
+        Swipe your way to{" "}
+        <span className="bg-clip-text text-transparent" style={{ backgroundImage: "var(--gradient-hero)" }}>
+          the right career.
+        </span>
       </h1>
-      <p className="mx-auto mt-5 max-w-md text-balance text-base text-muted-foreground sm:text-lg">
+      <p className="mx-auto mt-5 max-w-md text-balance text-[15px] leading-relaxed text-muted-foreground sm:text-base">
         No long forms. No 40-page reports. Just a few honest gut reactions — and a recommendation that actually sounds like you.
       </p>
       <motion.button
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={onStart}
-        className="mt-10 inline-flex items-center gap-2 rounded-full bg-foreground px-8 py-4 text-base font-semibold text-background shadow-[var(--shadow-glow)] transition"
+        className="ios-pill mt-10 inline-flex items-center gap-2 px-8 py-3.5 text-[17px] font-semibold text-white shadow-[var(--shadow-ios-button)] transition"
+        style={{ background: "var(--gradient-button)" }}
       >
-        Start swiping <span>→</span>
+        Start swiping <span aria-hidden>→</span>
       </motion.button>
-      <div className="mt-10 flex items-center justify-center gap-6 text-xs text-muted-foreground">
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground sm:gap-6">
         <Hint icon="👈" label="Swipe left for no" />
         <Hint icon="👉" label="Swipe right for yes" />
       </div>
@@ -221,7 +245,7 @@ function Intro({ onStart }: { onStart: () => void }) {
 
 function Hint({ icon, label }: { icon: string; label: string }) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="ios-glass ios-pill flex items-center gap-1.5 px-3 py-1.5">
       <span>{icon}</span>
       <span>{label}</span>
     </div>
@@ -230,7 +254,7 @@ function Hint({ icon, label }: { icon: string; label: string }) {
 
 function Progress({ value }: { value: number }) {
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+    <div className="h-1 w-full overflow-hidden rounded-full bg-secondary">
       <motion.div
         className="h-full rounded-full"
         style={{ background: "var(--gradient-hero)" }}
@@ -242,16 +266,15 @@ function Progress({ value }: { value: number }) {
 }
 
 function SwipeDeck({ index, onChoice }: { index: number; onChoice: (d: "yes" | "no") => void }) {
-  // show current + next for stacked illusion
   const current = QUESTIONS[index];
-  const next = QUESTIONS[index + 1];
+  const hasDeck = index < QUESTIONS.length - 1;
   return (
-    <div className="relative h-[460px] w-full max-w-sm">
-      {next && (
-        <Card key={`next-${index}`} question={next} stacked />
-      )}
-      <SwipeCard key={`cur-${index}`} question={current} onChoice={onChoice} />
-      <div className="absolute -bottom-20 left-0 right-0 flex justify-center gap-6">
+    <div className="flex w-full max-w-sm flex-col items-center gap-7">
+      <div className="relative h-[min(420px,52dvh)] w-full min-h-[320px]">
+        {hasDeck && <CardDeck />}
+        <SwipeCard key={`cur-${index}`} question={current} onChoice={onChoice} />
+      </div>
+      <div className="flex items-center justify-center gap-12">
         <ActionButton variant="no" onClick={() => onChoice("no")} />
         <ActionButton variant="yes" onClick={() => onChoice("yes")} />
       </div>
@@ -259,14 +282,29 @@ function SwipeDeck({ index, onChoice }: { index: number; onChoice: (d: "yes" | "
   );
 }
 
+function CardDeck() {
+  return (
+    <>
+      <div
+        className="ios-card-back absolute inset-0 z-0 rounded-[28px]"
+        style={{ transform: "translateY(18px) scale(0.9)" }}
+      />
+      <div
+        className="ios-card-back absolute inset-0 z-[1] rounded-[28px]"
+        style={{ transform: "translateY(9px) scale(0.95)" }}
+      />
+    </>
+  );
+}
+
 function ActionButton({ variant, onClick }: { variant: "yes" | "no"; onClick: () => void }) {
   return (
     <motion.button
-      whileHover={{ scale: 1.08, y: -2 }}
-      whileTap={{ scale: 0.92 }}
+      whileHover={{ scale: 1.06 }}
+      whileTap={{ scale: 0.94 }}
       onClick={onClick}
-      aria-label={variant}
-      className="grid h-16 w-16 place-items-center rounded-full text-2xl font-bold text-white shadow-[var(--shadow-card)]"
+      aria-label={variant === "yes" ? "Yes" : "No"}
+      className="grid h-[60px] w-[60px] place-items-center rounded-full text-xl font-semibold text-white shadow-[var(--shadow-ios-button)] ring-4 ring-white/60"
       style={{ background: variant === "yes" ? "var(--gradient-yes)" : "var(--gradient-no)" }}
     >
       {variant === "yes" ? "✓" : "✕"}
@@ -274,22 +312,22 @@ function ActionButton({ variant, onClick }: { variant: "yes" | "no"; onClick: ()
   );
 }
 
-function Card({ question, stacked }: { question: Question; stacked?: boolean }) {
+function EmojiBadge({ emoji }: { emoji: string }) {
   return (
-    <div
-      className="absolute inset-0 flex flex-col justify-between rounded-[2rem] border border-border p-7 shadow-[var(--shadow-card)]"
-      style={{
-        background: "var(--gradient-card)",
-        transform: stacked ? "translateY(14px) scale(0.95)" : undefined,
-        opacity: stacked ? 0.6 : 1,
-      }}
-    >
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Prompt</span>
-        <span className="text-3xl">{question.emoji}</span>
-      </div>
-      <p className="text-2xl font-semibold leading-snug tracking-tight">{question.prompt}</p>
-      <div className="text-xs text-muted-foreground">Trust your gut — first reaction wins.</div>
+    <div className="grid h-14 w-14 place-items-center rounded-[18px] bg-secondary text-4xl shadow-sm">
+      {emoji}
+    </div>
+  );
+}
+
+function CardShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="ios-card relative flex h-full flex-col justify-between overflow-hidden rounded-[28px] p-6 sm:p-7">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-1"
+        style={{ background: "var(--gradient-hero)" }}
+      />
+      {children}
     </div>
   );
 }
@@ -315,34 +353,35 @@ function SwipeCard({ question, onChoice }: { question: Question; onChoice: (d: "
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ x: 400, opacity: 0, transition: { duration: 0.2 } }}
       transition={{ type: "spring", stiffness: 200, damping: 22 }}
-      className="absolute inset-0 cursor-grab touch-none active:cursor-grabbing"
+      className="absolute inset-0 z-10 cursor-grab touch-none active:cursor-grabbing"
     >
-      <div
-        className="relative flex h-full flex-col justify-between overflow-hidden rounded-[2rem] border border-border p-7 shadow-[var(--shadow-card)]"
-        style={{ background: "var(--gradient-card)" }}
-      >
-        <motion.div
-          style={{ opacity: yesOpacity }}
-          className="absolute left-6 top-6 rounded-xl border-2 px-3 py-1 text-sm font-black uppercase tracking-wider"
-          // eslint-disable-next-line react/forbid-dom-props
-        >
-          <span style={{ color: "var(--yes)", borderColor: "var(--yes)" }} className="rounded-xl border-2 px-3 py-1">Yes</span>
+      <CardShell>
+        <motion.div style={{ opacity: yesOpacity }} className="absolute left-5 top-5 z-10">
+          <SwipeStamp label="Yes" color="var(--yes)" />
         </motion.div>
-        <motion.div
-          style={{ opacity: noOpacity }}
-          className="absolute right-6 top-6 rounded-xl px-3 py-1 text-sm font-black uppercase tracking-wider"
-        >
-          <span style={{ color: "var(--no)", borderColor: "var(--no)" }} className="rounded-xl border-2 px-3 py-1">Nope</span>
+        <motion.div style={{ opacity: noOpacity }} className="absolute right-5 top-5 z-10">
+          <SwipeStamp label="Nope" color="var(--no)" />
         </motion.div>
 
         <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Prompt</span>
-          <span className="text-4xl">{question.emoji}</span>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Prompt</span>
+          <EmojiBadge emoji={question.emoji} />
         </div>
-        <p className="text-[1.7rem] font-semibold leading-tight tracking-tight">{question.prompt}</p>
+        <p className="text-[1.55rem] font-semibold leading-tight tracking-tight sm:text-[1.7rem]">{question.prompt}</p>
         <div className="text-xs text-muted-foreground">Drag the card, tap a button, or use your gut.</div>
-      </div>
+      </CardShell>
     </motion.div>
+  );
+}
+
+function SwipeStamp({ label, color }: { label: string; color: string }) {
+  return (
+    <span
+      className="rounded-xl border-[3px] bg-white px-3 py-1 text-sm font-bold uppercase tracking-wider shadow-sm"
+      style={{ color, borderColor: color }}
+    >
+      {label}
+    </span>
   );
 }
 
@@ -356,33 +395,33 @@ function Result({ match, onReset }: { match: CareerMatch; onReset: () => void })
       transition={{ type: "spring", stiffness: 160, damping: 20 }}
       className="w-full"
     >
-      <div
-        className="overflow-hidden rounded-[2rem] border border-border p-8 shadow-[var(--shadow-card)]"
-        style={{ background: "var(--gradient-card)" }}
-      >
-        <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Your match</div>
+      <div className="ios-card overflow-hidden rounded-[28px] p-6 sm:p-8">
+        <div
+          className="pointer-events-none -mx-6 -mt-6 mb-4 h-1 sm:-mx-8 sm:-mt-8"
+          style={{ background: "var(--gradient-hero)" }}
+        />
+        <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Your match</div>
         <div className="mt-4 flex items-center gap-4">
           <div
-            className="grid h-16 w-16 place-items-center rounded-2xl text-3xl shadow-[var(--shadow-glow)]"
-            style={{ background: "var(--gradient-hero)" }}
+            className="grid h-16 w-16 shrink-0 place-items-center rounded-[18px] bg-secondary text-3xl shadow-sm"
           >
             {match.emoji}
           </div>
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight">{match.title}</h2>
+          <div className="min-w-0">
+            <h2 className="text-[1.65rem] font-bold tracking-tight sm:text-3xl">{match.title}</h2>
             <p className="text-sm text-muted-foreground">{match.tagline}</p>
           </div>
         </div>
 
-        <p className="mt-6 text-base leading-relaxed text-foreground/80">{match.why}</p>
+        <p className="mt-6 text-[15px] leading-relaxed text-foreground/85 sm:text-base">{match.why}</p>
 
         <div className="mt-6">
-          <div className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">Paths to explore</div>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Paths to explore</div>
           <div className="mt-3 flex flex-wrap gap-2">
             {match.paths.map((p) => (
               <span
                 key={p}
-                className="rounded-full border border-border bg-background/60 px-3 py-1.5 text-sm font-medium"
+                className="ios-pill bg-secondary px-3 py-1.5 text-sm font-medium text-foreground/90"
               >
                 {p}
               </span>
@@ -391,16 +430,17 @@ function Result({ match, onReset }: { match: CareerMatch; onReset: () => void })
         </div>
       </div>
 
-      <div className="mt-6 flex gap-3">
+      <div className="mt-5 flex flex-col gap-3 sm:flex-row">
         <button
           onClick={onReset}
-          className="flex-1 rounded-full border border-border bg-card px-5 py-3 text-sm font-semibold transition hover:bg-muted"
+          className="ios-pill ios-card flex-1 px-5 py-3 text-sm font-semibold transition hover:bg-secondary"
         >
           Swipe again
         </button>
         <button
           onClick={() => navigator.clipboard?.writeText(shareText)}
-          className="flex-1 rounded-full bg-foreground px-5 py-3 text-sm font-semibold text-background"
+          className="ios-pill flex-1 px-5 py-3 text-sm font-semibold text-white shadow-[var(--shadow-ios-button)]"
+          style={{ background: "var(--gradient-button)" }}
         >
           Copy result
         </button>
